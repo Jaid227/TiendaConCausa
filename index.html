@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Sistema de Registro de Ventas | Inventario Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-theme="light">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="logo-area">
+                <i class="fas fa-chart-line"></i>
+                <h1>Registro de Ventas</h1>
+            </div>
+            <div class="header-actions">
+                <button id="themeToggleBtn" class="btn btn-icon">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="resetBtn" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Resetear Ventas
+                </button>
+            </div>
+        </header>
+
+        <!-- Panel de Productos (Inventario) - Colapsable -->
+        <section class="card collapsible-card">
+            <div class="card-header collapsible-header" id="inventoryHeader">
+                <div class="header-left">
+                    <i class="fas fa-chevron-down collapse-icon" id="collapseIcon"></i>
+                    <h2><i class="fas fa-boxes"></i> Catálogo de Productos</h2>
+                    <span class="badge">Inventario Base</span>
+                </div>
+                <div class="card-actions">
+                    <span class="product-count" id="productCount"></span>
+                </div>
+            </div>
+            <div class="collapsible-content" id="inventoryContent">
+                <div class="table-responsive">
+                    <table class="data-table" id="inventoryTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre del Producto</th>
+                                <th>Costo Unitario (€)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryBody">
+                            <!-- Los productos se cargarán desde JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel de Venta Rápida -->
+        <section class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-cart-plus"></i> Registrar Venta</h2>
+            </div>
+            <div class="sale-form">
+                <div class="form-group">
+                    <label for="productId"><i class="fas fa-barcode"></i> ID del Producto</label>
+                    <input type="text" id="productId" placeholder="Ej: PROD-001" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="quantity"><i class="fas fa-cubes"></i> Cantidad (Unidades)</label>
+                    <input type="number" id="quantity" min="1" value="1" step="1">
+                </div>
+                <button id="addSaleBtn" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i> Agregar Venta
+                </button>
+            </div>
+            <div class="info-preview" id="previewInfo" style="display: none;">
+                <i class="fas fa-info-circle"></i> 
+                <span id="previewText"></span>
+            </div>
+        </section>
+
+        <!-- Panel de Ventas Realizadas -->
+        <section class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-receipt"></i> Ventas Registradas</h2>
+                <div class="card-actions">
+                    <button id="sortByIdBtn" class="btn btn-sm btn-outline">
+                        <i class="fas fa-sort-alpha-down"></i> Ordenar por ID
+                    </button>
+                    <button id="sortByDateBtn" class="btn btn-sm btn-outline">
+                        <i class="fas fa-calendar-alt"></i> Ordenar por Fecha
+                    </button>
+                    <button id="downloadBtn" class="btn btn-sm btn-success">
+                        <i class="fas fa-download"></i> Descargar Excel
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table" id="salesTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre Producto</th>
+                            <th>Costo Unitario (€)</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal (€)</th>
+                            <th>Fecha/Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salesBody">
+                        <tr class="empty-row">
+                            <td colspan="6">No hay ventas registradas</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="total-summary">
+                <div class="total-box">
+                    <span><i class="fas fa-calculator"></i> TOTAL DE VENTAS:</span>
+                    <strong id="totalSalesAmount">0.00 €</strong>
+                </div>
+                <div class="total-detail">
+                    <span id="totalItemsCount">0 unidades vendidas</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal de Contraseña para Reset -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> Verificación Requerida</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Para borrar TODAS las ventas registradas, ingrese la contraseña de autorización.</p>
+                <input type="password" id="resetPassword" placeholder="Contraseña" autocomplete="off">
+                <div id="passError" class="error-msg"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmResetBtn" class="btn btn-danger">Borrar Todo</button>
+                <button id="cancelModalBtn" class="btn btn-secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
