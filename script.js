@@ -229,7 +229,7 @@ function renderSales() {
     
     if (salesRegistry.length === 0) {
         salesBody.innerHTML = `<tr class="empty-row"><td colspan="6">No hay ventas registradas</td></tr>`;
-        totalSalesSpan.innerText = "0.00 €";
+        totalSalesSpan.innerText = "0.00 MXN";
         totalItemsSpan.innerText = "0 unidades vendidas";
         return;
     }
@@ -249,15 +249,15 @@ function renderSales() {
         row.innerHTML = `
             <td><strong>${sale.id}</strong></td>
             <td>${sale.productName}</td>
-            <td>${sale.unitCost.toFixed(2)} €</td>
+            <td>${sale.unitCost.toFixed(2)} MXN</td>
             <td style="font-weight: 600; color: var(--btn-primary);">${sale.quantity} unidades</td>
-            <td style="font-weight: 700; color: #059669;">${sale.subtotal.toFixed(2)} €</td>
+            <td style="font-weight: 700; color: #059669;">${sale.subtotal.toFixed(2)} MXN</td>
             <td style="font-size:0.75rem;">${formattedDate}</td>
         `;
         salesBody.appendChild(row);
     });
     
-    totalSalesSpan.innerText = `${totalGeneral.toFixed(2)} €`;
+    totalSalesSpan.innerText = `${totalGeneral.toFixed(2)} MXN`;
     totalItemsSpan.innerText = `${totalUnidades} unidades vendidas en ${salesRegistry.length} transacciones`;
 }
 
@@ -273,7 +273,7 @@ function updatePreview() {
     if (foundProduct) {
         const cantidad = parseInt(quantityInput.value) || 1;
         const subtotalPreview = foundProduct.cost * cantidad;
-        previewText.innerHTML = `Producto: <strong>${foundProduct.name}</strong> | Costo unitario: <strong>${foundProduct.cost.toFixed(2)} €</strong> | Subtotal para ${cantidad} unidad(es): <strong style="color:#059669;">${subtotalPreview.toFixed(2)} €</strong>`;
+        previewText.innerHTML = `Producto: <strong>${foundProduct.name}</strong> | Costo unitario: <strong>${foundProduct.cost.toFixed(2)} MXN</strong> | Subtotal para ${cantidad} unidad(es): <strong style="color:#059669;">${subtotalPreview.toFixed(2)} MXN</strong>`;
         previewInfo.style.display = "block";
         previewInfo.style.background = "var(--preview-bg)";
         previewInfo.style.color = "var(--preview-text)";
@@ -327,7 +327,7 @@ function addSale() {
     renderSales();
     saveSalesToLocalStorage(); // GUARDAR AUTOMÁTICAMENTE
     
-    showTemporaryMessage(`✅ Venta registrada: ${quantity} x ${foundProduct.name} = ${subtotal.toFixed(2)} €`);
+    showTemporaryMessage(`✅ Venta registrada: ${quantity} x ${foundProduct.name} = ${subtotal.toFixed(2)} MXN`);
     
     productIdInput.value = "";
     quantityInput.value = "1";
@@ -414,9 +414,9 @@ function downloadSalesAsExcel() {
                     <tr>
                         <th>ID</th>
                         <th>Nombre Producto</th>
-                        <th>Costo Unitario (€)</th>
+                        <th>Costo Unitario (MXN)</th>
                         <th>Cantidad</th>
-                        <th>Subtotal (€)</th>
+                        <th>Subtotal (MXN)</th>
                         <th>Fecha/Hora</th>
                     </tr>
                 </thead>
@@ -465,7 +465,7 @@ function downloadSalesAsExcel() {
             <br>
             <h3>Resumen de Ventas</h3>
             <ul>
-                <li>Total de ventas: ${totalGeneral.toFixed(2)} €</li>
+                <li>Total de ventas: ${totalGeneral.toFixed(2)} MXN</li>
                 <li>Total de unidades vendidas: ${totalUnidades}</li>
                 <li>Número de transacciones: ${salesRegistry.length}</li>
             </ul>
