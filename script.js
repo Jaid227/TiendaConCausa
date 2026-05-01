@@ -216,7 +216,7 @@ function renderInventory() {
         row.innerHTML = `
             <td><strong>${product.id}</strong></td>
             <td>${product.name}</td>
-            <td>${product.cost.toFixed(2)} €</td>
+            <td>${product.cost.toFixed(2)} MXN</td>
         `;
         inventoryBody.appendChild(row);
     });
@@ -453,7 +453,7 @@ function downloadSalesAsExcel() {
                     <tr class="total-row">
                         <td colspan="3"><strong>TOTALES:</strong></td>
                         <td><strong>${totalUnidades} unidades</strong></td>
-                        <td><strong>${totalGeneral.toFixed(2)} €</strong></td>
+                        <td><strong>${totalGeneral.toFixed(2)} MXN</strong></td>
                         <td></td>
                     </tr>
                     <tr>
