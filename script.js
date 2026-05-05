@@ -282,7 +282,7 @@ function renderSales() {
     if (!salesBody) return;
     
     if (salesRegistry.length === 0) {
-        salesBody.innerHTML = `<tr class="empty-row"><td colspan="6">No hay ventas registradas</td></tr>`;
+        salesBody.innerHTML = `<tr class="empty-row"><td colspan="7">No hay ventas registradas</td></tr>`;
         totalSalesSpan.innerText = "0.00 MXN";
         totalItemsSpan.innerText = "0 unidades vendidas";
         return;
@@ -292,7 +292,7 @@ function renderSales() {
     let totalGeneral = 0;
     let totalUnidades = 0;
     
-    salesRegistry.forEach((sale) => {
+    salesRegistry.forEach((sale, index) => {
         totalGeneral += sale.subtotal;
         totalUnidades += sale.quantity;
         
@@ -307,14 +307,112 @@ function renderSales() {
             <td style="font-weight: 600;">${sale.quantity} unidades</td>
             <td style="font-weight: 700; color: #059669;">${sale.subtotal.toFixed(2)} MXN</td>
             <td style="font-size:0.75rem;">${formattedDate}</td>
+            <td style="text-align: center;">
+                <button class="btn-delete-sale" data-index="${index}">
+                    <i class="fas fa-trash-alt"></i> Eliminar
+                </button>
+            </td>
         `;
         salesBody.appendChild(row);
     });
     
     totalSalesSpan.innerText = `${totalGeneral.toFixed(2)} MXN`;
     totalItemsSpan.innerText = `${totalUnidades} unidades vendidas en ${salesRegistry.length} transacciones`;
+    
+    // Agregar event listeners a los botones de eliminar
+    document.querySelectorAll('.btn-delete-sale').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const index = parseInt(btn.getAttribute('data-index'));
+            deleteSale(index);
+        });
+    });
 }
 
+// Función para eliminar una venta individual (CON CONTRASEÑA)
+function deleteSale(index) {
+    const saleToDelete = salesRegistry[index];
+    if (!saleToDelete) return;
+    
+    // Crear modal de confirmación personalizado
+    const confirmModal = document.createElement('div');
+    confirmModal.className = 'modal-confirm';
+    confirmModal.innerHTML = `
+        <div class="modal-confirm-content">
+            <div class="modal-confirm-header">
+                <i class="fas fa-lock" style="color: #f59e0b; font-size: 24px;"></i>
+                <h3>Verificación Requerida</h3>
+            </div>
+            <div class="modal-confirm-body">
+                <p>Para eliminar esta venta, ingrese la contraseña de autorización.</p>
+                <div class="sale-details">
+                    <strong>Producto:</strong> ${saleToDelete.productName}<br>
+                    <strong>Cantidad:</strong> ${saleToDelete.quantity} unidades<br>
+                    <strong>Subtotal:</strong> ${saleToDelete.subtotal.toFixed(2)} MXN<br>
+                    <strong>Fecha:</strong> ${new Date(saleToDelete.timestamp).toLocaleString()}
+                </div>
+                <input type="password" id="deletePasswordInput" placeholder="Contraseña" autocomplete="off" style="width: 100%; padding: 10px; margin-top: 15px; border: 1.5px solid var(--border-color); border-radius: 40px; background: var(--bg-card); color: var(--text-primary);">
+                <div id="deletePassError" class="error-msg" style="margin-top: 8px;"></div>
+            </div>
+            <div class="modal-confirm-footer">
+                <button class="btn-confirm-yes" id="confirmDeleteBtn">
+                    <i class="fas fa-trash-alt"></i> Eliminar
+                </button>
+                <button class="btn-confirm-no" id="cancelDeleteBtn">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(confirmModal);
+    
+    // Eventos de los botones
+    const confirmDeleteBtn = confirmModal.querySelector('#confirmDeleteBtn');
+    const cancelDeleteBtn = confirmModal.querySelector('#cancelDeleteBtn');
+    const passwordInput = confirmModal.querySelector('#deletePasswordInput');
+    const errorSpan = confirmModal.querySelector('#deletePassError');
+    
+    // Enfocar el input de contraseña
+    setTimeout(() => passwordInput.focus(), 100);
+    
+    confirmDeleteBtn.addEventListener('click', () => {
+        const enteredPass = passwordInput.value;
+        
+        if (enteredPass === RESET_PASSWORD) {
+            // Contraseña correcta - Eliminar la venta
+            const deletedSale = salesRegistry[index];
+            salesRegistry.splice(index, 1);
+            renderSales();
+            saveSalesToLocalStorage();
+            showTemporaryMessage(`🗑️ Se eliminó la venta de ${deletedSale.productName} (${deletedSale.quantity} unidades)`);
+            confirmModal.remove();
+        } else {
+            // Contraseña incorrecta
+            errorSpan.innerText = "❌ Contraseña incorrecta. No se eliminó la venta.";
+            passwordInput.value = "";
+            passwordInput.focus();
+        }
+    });
+    
+    cancelDeleteBtn.addEventListener('click', () => {
+        confirmModal.remove();
+    });
+    
+    // Permitir presionar Enter para confirmar
+    passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            confirmDeleteBtn.click();
+        }
+    });
+    
+    // Cerrar al hacer clic fuera
+    confirmModal.addEventListener('click', (e) => {
+        if (e.target === confirmModal) {
+            confirmModal.remove();
+        }
+    });
+}
 function updatePreview() {
     const idRaw = productIdInput.value.trim();
     if (idRaw === "") {
