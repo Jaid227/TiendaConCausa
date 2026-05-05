@@ -537,6 +537,144 @@ body {
     border-radius: 4px;
 }
 
+/* Estilos para el botón de eliminar */
+.btn-delete-sale {
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-delete-sale:hover {
+    background: #b91c1c;
+    transform: scale(1.05);
+}
+
+/* Modal de confirmación */
+.modal-confirm {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: modalFadeIn 0.2s ease;
+}
+
+.modal-confirm-content {
+    background: var(--bg-card);
+    border-radius: 24px;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 20px 35px rgba(0,0,0,0.3);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-confirm-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-confirm-header h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.3rem;
+}
+
+.modal-confirm-body {
+    padding: 20px 24px;
+    color: var(--text-primary);
+}
+
+.sale-details {
+    background: var(--table-header-bg);
+    padding: 12px;
+    border-radius: 12px;
+    margin: 15px 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.warning-text {
+    color: #f59e0b;
+    font-size: 0.85rem;
+    margin-top: 12px;
+    font-weight: 500;
+}
+
+.modal-confirm-footer {
+    padding: 16px 24px 24px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.btn-confirm-yes {
+    background: #dc2626;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-confirm-yes:hover {
+    background: #b91c1c;
+    transform: scale(1.02);
+}
+
+.btn-confirm-no {
+    background: #64748b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-confirm-no:hover {
+    background: #475569;
+    transform: scale(1.02);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     body {
